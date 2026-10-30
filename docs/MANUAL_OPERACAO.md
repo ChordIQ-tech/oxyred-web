@@ -75,7 +75,7 @@ Automatizar exige um workflow no repositório público e o escopo `workflow` hab
 
 | Aba | Conteúdo |
 |---|---|
-| **Indicadores** | Nove leituras: temperatura do metal, nível de metal, furo de corrida, O₂/recirculado, gás de topo (CO/CO₂/H₂), produção estimada, consumo específico de briquete, desgaste máximo do refratário, corridas até o limite |
+| **Indicadores** | Nove leituras: temperatura do metal, nível de metal, furo de corrida, O₂/recirculado, gás de topo (CO/CO₂/H₂), produção estimada, consumo específico de briquete, desgaste máximo do refratário, corridas até o limite. “Corridas até o limite” aparece como `—` quando o dataset tem menos de duas corridas (não há tendência para extrapolar) |
 | **Cenário** | Três sliders (carga de briquete 12–32 t/h, O₂ puro 4.000–11.000 Nm³/h, alvo de temperatura 1.480–1.536 °C), veredito de envelope e lista de checagens |
 | **Plataforma** | Os oito contratos de dados, validados na hora, com o estado de integração de cada um |
 
@@ -215,11 +215,12 @@ pronta ou se houver erro de console — use isso como teste de fumaça antes de 
 |---|---|---|
 | Tela preta, faixa “Falha ao carregar…” | three.js não veio do CDN (rede bloqueada) ou `file://` | Servir por HTTP; liberar `cdnjs.cloudflare.com`; ver console |
 | Faixa “Falha ao iniciar o gêmeo digital” | Dataset inválido ou WebGL indisponível | Ler a mensagem do console; testar em outro navegador |
-| “Plataforma · carregando…” parado | Contratos ainda não carregaram, ou `contracts/` ausente | Aguardar 1–3 s ou abrir a aba; conferir os arquivos |
+| “Plataforma · carregando…” parado | A validação busca oito arquivos; em máquina carregada leva alguns segundos | Aguardar; abrir a aba força a carga; conferir se `contracts/` existe |
 | Contrato em vermelho | Schema ou exemplo inválido | Corrigir o par schema/exemplo; a mensagem indica o erro |
 | Cena lenta / travando | GPU integrada ou janela muito grande | Fechar outras abas; reduzir a janela; `pixelRatio` já é limitado a 2 |
 | Indicadores congelados com a aba em segundo plano | A animação pausa em aba oculta (por desenho) | Voltar à aba |
 | Documentos do modal “Sobre” dão 404 | `docs/` não foi copiada na publicação | Refazer o passo 2 da §3 |
+| Documento abre como texto puro (`#`, `|`) | Renderizador (`marked`) não veio do CDN | Liberar `cdnjs.cloudflare.com`; o link “Markdown puro” é o mesmo conteúdo sem render |
 | Captura sai preta | Página ainda carregando | Aumentar `--wait` (ex.: `--wait=12000`); rodar com a máquina livre |
 
 ---

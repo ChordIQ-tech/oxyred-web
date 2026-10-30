@@ -36,7 +36,7 @@ resultado.
 | Validador de JSON Schema sem dependências | `src/platform/schema.js` | Subconjunto 2020-12 (ver §5) |
 | 4 adaptadores de plataforma com estado explícito | `src/platform/adapters.js` | Serviço ausente responde `available: false` + razão |
 | Tool de captura headless (CDP) | `tools/shot.mjs` | Sai com código 1 em erro de console |
-| Este conjunto de 5 documentos | `web/docs/` | Ligado no modal “Sobre” |
+| Este conjunto de 5 documentos, com leitor próprio | `web/docs/` | Abre pelo modal “Sobre” em `docs/leitor.html` |
 
 ---
 

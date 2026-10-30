@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Oxy-Red · Documentação</title>
+<meta name="description" content="Documentação do gêmeo digital Oxy-Red — Etapa 1: escopo, arquitetura, integração futura e manual de operação.">
+<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+<style>
+  :root {
+    --bg: #0a0b0d;
+    --panel: #101318;
+    --line: #232a33;
+    --text: #d8e0ea;
+    --dim: #8494a6;
+    --accent: #62b3ff;
+    --warn: #ffb454;
+  }
+  * { box-sizing: border-box; }
+  html { background: var(--bg); }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font: 15px/1.65 -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Roboto, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  header {
+    position: sticky; top: 0; z-index: 5;
+    display: flex; flex-wrap: wrap; gap: 12px; align-items: center;
+    padding: 12px 20px;
+    background: rgba(10, 11, 13, .93);
+    border-bottom: 1px solid var(--line);
+    backdrop-filter: blur(8px);
+  }
+  header .spacer { flex: 1; }
+  header a, header select {
+    color: var(--dim);
+    text-decoration: none;
+    font-size: 12.5px;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+    background: transparent;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 6px 10px;
+  }
+  header a:hover, header select:hover { color: var(--text); border-color: #33404f; }
+  header .brand {
+    border: 0; padding: 0;
+    color: var(--text);
+    font-weight: 600;
+    letter-spacing: .12em;
+    font-size: 12px;
+    text-transform: uppercase;
+  }
+  main { max-width: 78ch; margin: 0 auto; padding: 30px 20px 90px; }
+  h1, h2, h3, h4 { line-height: 1.25; color: #f2f6fb; }
+  h1 { font-size: 26px; margin: 0 0 18px; }
+  h2 { font-size: 19px; margin: 38px 0 12px; padding-top: 14px; border-top: 1px solid var(--line); }
+  h3 { font-size: 16px; margin: 26px 0 8px; color: var(--accent); }
+  p, li { color: var(--text); }
+  a { color: var(--accent); }
+  strong { color: #fff; }
+  code {
+    background: #161b22;
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 1px 5px;
+    font-size: 12.8px;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    color: #cfe4ff;
+  }
+  pre {
+    background: #0d1117;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 14px 16px;
+    overflow-x: auto;
+  }
+  pre code { background: none; border: 0; padding: 0; color: #d5e2f0; }
+  table { border-collapse: collapse; width: 100%; margin: 14px 0 20px; font-size: 13.6px; }
+  th, td { border: 1px solid var(--line); padding: 7px 10px; text-align: left; vertical-align: top; }
+  th { background: #131820; color: #eaf2fb; font-weight: 600; }
+  tr:nth-child(even) td { background: #0d1117; }
+  blockquote {
+    margin: 18px 0;
+    padding: 12px 16px;
+    border-left: 3px solid var(--warn);
+    background: #14120d;
+    color: #ecdcc0;
+    border-radius: 0 6px 6px 0;
+  }
+  blockquote p { color: inherit; margin: 6px 0; }
+  hr { border: 0; border-top: 1px solid var(--line); margin: 30px 0; }
+  ul, ol { padding-left: 22px; }
+  .estado { color: var(--dim); font-size: 13px; }
+  .erro { border: 1px solid #5a2323; background: #1a1010; color: #ffb3b3; border-radius: 8px; padding: 14px 16px; }
+</style>
+</head>
+<body>
+
+<header>
+  <a class="brand" href="../index.html">Oxy-Red · Gêmeo Digital</a>
+  <span class="spacer"></span>
+  <select id="picker" aria-label="Escolher documento">
+    <option value="ESCOPO_ETAPA1.md">Escopo · Etapa 1</option>
+    <option value="ESCOPO_ETAPA2.md">Escopo · Etapa 2</option>
+    <option value="ARQUITETURA.md">Arquitetura</option>
+    <option value="INTEGRACAO_FUTURA.md">Integração futura</option>
+    <option value="MANUAL_OPERACAO.md">Manual de operação</option>
+  </select>
+  <a id="rawLink" href="#">Markdown puro</a>
+  <a href="../index.html">Voltar ao app</a>
+</header>
+
+<main id="doc"><p class="estado">Carregando documento…</p></main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/marked/4.3.0/marked.min.js"></script>
+<script>
+  // Leitor simples: busca o .md ao lado (uma única fonte de verdade) e renderiza.
+  // A lista é fechada de propósito — nada de caminho arbitrário vindo da URL.
+  var DOCS = {
+    'ESCOPO_ETAPA1.md': 'Escopo da Etapa 1',
+    'ESCOPO_ETAPA2.md': 'Escopo proposto da Etapa 2',
+    'ARQUITETURA.md': 'Arquitetura',
+    'INTEGRACAO_FUTURA.md': 'Integração futura',
+    'MANUAL_OPERACAO.md': 'Manual de operação'
+  };
+  var main = document.getElementById('doc');
+  var picker = document.getElementById('picker');
+  var rawLink = document.getElementById('rawLink');
+
+  function fail(msg) {
+    main.innerHTML = '<div class="erro"><b>Não foi possível abrir o documento.</b><br>' + msg + '</div>';
+    document.body.dataset.ready = 'error';
+  }
+
+  function load(name) {
+    if (!DOCS[name]) {
+      fail('Documento desconhecido: <code>' + String(name).replace(/[<>&]/g, '') + '</code>. '
+        + 'Escolha um dos cinco no seletor acima.');
+      return;
+    }
+    picker.value = name;
+    rawLink.href = './' + name;
+    document.title = DOCS[name] + ' · Oxy-Red';
+    main.innerHTML = '<p class="estado">Carregando documento…</p>';
+
+    fetch('./' + name, { cache: 'no-cache' })
+      .then(function (r) { return r.ok ? r.text() : Promise.reject(new Error('HTTP ' + r.status)); })
+      .then(function (text) {
+        if (typeof marked === 'undefined') {
+          // Sem o renderizador (CDN bloqueada): mostra o Markdown como texto.
+          var pre = document.createElement('pre');
+          var code = document.createElement('code');
+          code.textContent = text;
+          pre.appendChild(code);
+          main.innerHTML = '';
+          main.appendChild(pre);
+          document.body.dataset.ready = 'true';
+          return;
+        }
+        main.innerHTML = marked.parse(text);
+        document.body.dataset.ready = 'true';
+      })
+      .catch(function (err) {
+        fail('Falha ao carregar <code>' + name + '</code> (' + err.message + '). '
+          + 'Se você abriu o arquivo direto do disco, sirva a pasta por HTTP — veja o manual.');
+      });
+  }
+
+  picker.addEventListener('change', function () {
+    var url = location.pathname + '?doc=' + encodeURIComponent(picker.value);
+    history.replaceState(null, '', url);
+    load(picker.value);
+  });
+
+  var asked = new URLSearchParams(location.search).get('doc') || 'ESCOPO_ETAPA1.md';
+  load(asked);
+</script>
+</body>
+</html>
