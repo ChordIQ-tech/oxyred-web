@@ -220,7 +220,7 @@ pronta ou se houver erro de console — use isso como teste de fumaça antes de 
 | Cena lenta / travando | GPU integrada ou janela muito grande | Fechar outras abas; reduzir a janela; `pixelRatio` já é limitado a 2 |
 | Indicadores congelados com a aba em segundo plano | A animação pausa em aba oculta (por desenho) | Voltar à aba |
 | Documentos do modal “Sobre” dão 404 | `docs/` não foi copiada na publicação | Refazer o passo 2 da §3 |
-| Documento abre como texto puro (`#`, `|`) | Renderizador (`marked`) não veio do CDN | Liberar `cdnjs.cloudflare.com`; o link “Markdown puro” é o mesmo conteúdo sem render |
+| Documento abre como texto puro (cerquilhas e barras visíveis) | Renderizador (`marked`) não veio do CDN | Liberar `cdnjs.cloudflare.com`; o link “Markdown puro” é o mesmo conteúdo sem render |
 | Captura sai preta | Página ainda carregando | Aumentar `--wait` (ex.: `--wait=12000`); rodar com a máquina livre |
 
 ---
