@@ -1,0 +1,60 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://chordiq.tech/oxyred/contracts/wear-dataset.schema.json",
+  "title": "Dataset de desgaste do revestimento",
+  "description": "Formato canônico de desgaste por zona (fiadas x setores), o mesmo consumido pelo hub de gêmeos digitais. Valores em mm de desgaste, salvo tipo=indice.",
+  "type": "object",
+  "required": ["zones", "snaps"],
+  "properties": {
+    "origem": { "type": "string", "description": "sintético | medido | carregado" },
+    "titulo": { "type": "string" },
+    "aviso": { "type": "string", "description": "Ressalva exibida junto aos dados." },
+    "modulo": { "type": "string" },
+    "zones": {
+      "type": "object",
+      "required": ["cuba_superior", "cuba_inferior", "ventaneiras", "cadinho_parede", "soleira"],
+      "additionalProperties": false,
+      "properties": {
+        "cuba_superior": { "$ref": "#/$defs/zone" },
+        "cuba_inferior": { "$ref": "#/$defs/zone" },
+        "ventaneiras": { "$ref": "#/$defs/zone" },
+        "cadinho_parede": { "$ref": "#/$defs/zone" },
+        "soleira": { "$ref": "#/$defs/zone" }
+      }
+    },
+    "snaps": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["x", "label", "wear"],
+        "properties": {
+          "x": { "type": "number", "description": "Corrida (eixo do histórico)." },
+          "label": { "type": "string" },
+          "wear": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "array",
+              "items": {
+                "type": "array",
+                "items": { "type": ["number", "null"] }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "zone": {
+      "type": "object",
+      "required": ["N", "M", "e0", "emin"],
+      "properties": {
+        "N": { "type": "integer", "minimum": 1, "maximum": 200 },
+        "M": { "type": "integer", "minimum": 1, "maximum": 360 },
+        "e0": { "type": "number", "minimum": 1 },
+        "emin": { "type": "number", "minimum": 0 }
+      }
+    }
+  }
+}

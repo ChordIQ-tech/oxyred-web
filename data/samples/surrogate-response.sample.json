@@ -1,0 +1,11 @@
+{
+  "model": "scalar",
+  "version": "0.1.0-contrato",
+  "source": "synthetic",
+  "outputs": {
+    "metalTempC": 1512.0,
+    "feYieldPct": 92.4,
+    "refractoryWearRateMmH": 0.14
+  },
+  "accuracy": { "rmseK": 65.8, "r2": 0.91 }
+}

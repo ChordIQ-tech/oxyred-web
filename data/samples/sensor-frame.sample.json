@@ -1,0 +1,14 @@
+{
+  "timestamp": "2026-10-28T10:40:00-03:00",
+  "source": "simulador",
+  "quality": "good",
+  "tags": {
+    "bath_temp_c": 1512.4,
+    "tap_open": false,
+    "oxygen_flow_nm3h": 7900,
+    "offgas_co_pct": 41.2,
+    "offgas_co2_pct": 33.8,
+    "metal_level_pct": 73,
+    "refractory_working_temp_c": 1388
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://chordiq.tech/oxyred/contracts/sensor-frame.schema.json",
+  "title": "Frame de sensor industrial",
+  "description": "Conteúdo normalizado de uma leitura de campo (OPC UA, MQTT ou simulador), já mapeado para as tags do gêmeo. Substitui o simulador sem mudar a HMI.",
+  "type": "object",
+  "required": ["timestamp", "source", "tags"],
+  "properties": {
+    "timestamp": { "type": "string", "description": "ISO-8601 com fuso." },
+    "source": { "type": "string", "enum": ["opcua", "mqtt", "simulador"] },
+    "quality": { "type": "string", "enum": ["good", "uncertain", "bad"] },
+    "tags": {
+      "type": "object",
+      "required": ["bath_temp_c", "tap_open"],
+      "properties": {
+        "bath_temp_c": { "type": "number", "minimum": 0, "maximum": 2500 },
+        "tap_open": { "type": "boolean" },
+        "oxygen_flow_nm3h": { "type": "number", "minimum": 0 },
+        "offgas_co_pct": { "type": "number", "minimum": 0, "maximum": 100 },
+        "offgas_co2_pct": { "type": "number", "minimum": 0, "maximum": 100 },
+        "metal_level_pct": { "type": "number", "minimum": 0, "maximum": 100 },
+        "refractory_working_temp_c": { "type": "number", "minimum": 0, "maximum": 2500 }
+      }
+    }
+  }
+}

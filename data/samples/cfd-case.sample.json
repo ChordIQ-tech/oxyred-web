@@ -1,0 +1,22 @@
+{
+  "caseId": "oxyred-2/base/etapa1-manifesto",
+  "solver": "chtMultiRegionFoam",
+  "generatedAt": "2026-10-28T00:00:00Z",
+  "status": "planejado",
+  "geometry": {
+    "rInner": 1.8,
+    "rShell": 2.34,
+    "yHearth": 0.9,
+    "yStock": 10.6,
+    "nTuyeres": 8,
+    "refractoryInitialMm": 450
+  },
+  "regions": ["freeboard", "bed", "bath_slag", "bath_metal", "refractory_working", "refractory_insulating", "shell_steel"],
+  "outputs": [
+    { "name": "T", "unit": "K", "region": "bed", "field": true },
+    { "name": "U", "unit": "m/s", "region": "freeboard", "field": true },
+    { "name": "CO", "unit": "massFraction", "region": "freeboard", "field": true },
+    { "name": "T", "unit": "K", "region": "refractory_working", "field": true }
+  ],
+  "notes": "Manifesto apenas. Nenhum caso executado na Etapa 1."
+}

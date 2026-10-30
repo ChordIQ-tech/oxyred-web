@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Oxy-Red · Gêmeo Digital</title>
+<meta name="description" content="Modelo de animação e base arquitetural do reator Oxy-Red — Etapa 1. Visualização 3D interativa com dados simulados.">
+<link rel="icon" href="./assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<link rel="stylesheet" href="./styles/app.css">
+</head>
+<body>
+
+<div id="stage">
+  <div id="scene"></div>
+
+  <header id="topbar">
+    <div>
+      <div class="eyebrow">Gêmeo Digital · Etapa 1</div>
+      <h1>Oxy-Red · Reator de Auto-Redução</h1>
+      <p class="sub">Modelo de animação e base arquitetural · dados simulados</p>
+    </div>
+    <div class="topbadges">
+      <span class="badge" id="modeBadge">Simulação</span>
+      <span class="badge ghost" id="clockBadge">00:00:00</span>
+    </div>
+  </header>
+
+  <!-- painel esquerdo: indicadores / cenário / plataforma -->
+  <section id="panel" class="card" aria-label="Painéis do gêmeo digital">
+    <div class="tabs" role="tablist">
+      <button role="tab" id="tabIndicators" aria-controls="paneIndicators" aria-selected="true">Indicadores</button>
+      <button role="tab" id="tabScenario" aria-controls="paneScenario" aria-selected="false">Cenário</button>
+      <button role="tab" id="tabPlatform" aria-controls="panePlatform" aria-selected="false">Plataforma</button>
+    </div>
+
+    <div class="tabpanes">
+      <!-- ------------------------------------------------ indicadores -->
+      <div class="tabpane" id="paneIndicators" role="tabpanel" aria-labelledby="tabIndicators">
+        <div class="cardhead">
+          <span class="eyebrow">Processo em tempo real</span>
+          <span class="meta" id="datasetLabel">—</span>
+        </div>
+
+        <div class="kpi">
+          <div class="top">
+            <span class="label">Temperatura do metal</span>
+            <span class="value hot" id="kTemp">—<i>°C</i></span>
+          </div>
+          <div class="bar"><i id="kTempBar" style="width:0%"></i></div>
+          <svg class="spark" viewBox="0 0 100 30" preserveAspectRatio="none" aria-hidden="true">
+            <polyline id="kTempSpark" points=""></polyline>
+          </svg>
+        </div>
+
+        <div class="kpi">
+          <div class="top">
+            <span class="label">Nível de metal no cadinho</span>
+            <span class="value" id="kLevel">—<i>%</i></span>
+          </div>
+          <div class="bar"><i id="kLevelBar" style="width:0%"></i></div>
+        </div>
+
+        <div class="kpi">
+          <div class="top">
+            <span class="label">Furo de corrida</span>
+            <span class="value" id="kTap">Fechado</span>
+          </div>
+        </div>
+
+        <div class="kpi">
+          <div class="top">
+            <span class="label">O₂ puro · gás recirculado</span>
+            <span class="value" id="kFlows">—</span>
+          </div>
+        </div>
+
+        <div class="kpi">
+          <div class="top">
+            <span class="label">Gás de topo · CO / CO₂ / H₂</span>
+            <span class="value" id="kOffgas">—</span>
+          </div>
+        </div>
+
+        <div class="kpi">
+          <div class="top">
+            <span class="label">Produção estimada</span>
+            <span class="value" id="kProd">—<i>kg/h</i></span>
+          </div>
+        </div>
+
+        <div class="kpi">
+          <div class="top">
+            <span class="label">Consumo específico de briquete</span>
+            <span class="value" id="kSpecific">—<i>kg/kg Fe</i></span>
+          </div>
+        </div>
+
+        <div class="kpi">
+          <div class="top">
+            <span class="label">Desgaste máximo do refratário</span>
+            <span class="value" id="kWear">—<i>mm</i></span>
+          </div>
+          <div class="bar"><i id="kWearBar" style="width:0%"></i></div>
+        </div>
+
+        <div class="kpi">
+          <div class="top">
+            <span class="label">Corridas até o limite</span>
+            <span class="value" id="kLife">—</span>
+          </div>
+        </div>
+
+        <p class="hint">
+          Leitura ilustrativa gerada pelo simulador. Nenhum modelo físico é resolvido nesta etapa —
+          ver <code>docs/ESCOPO_ETAPA1.md</code>.
+        </p>
+      </div>
+
+      <!-- ------------------------------------------------ cenário -->
+      <div class="tabpane" id="paneScenario" role="tabpanel" aria-labelledby="tabScenario" hidden>
+        <div class="cardhead">
+          <span class="eyebrow">Parâmetros do cenário</span>
+          <span class="meta">ilustrativo</span>
+        </div>
+
+        <div class="slider">
+          <div class="top"><span>Carga de briquete</span><b id="sThroughputVal">—</b></div>
+          <input type="range" id="sThroughput" min="12000" max="32000" step="500" value="22800" aria-label="Carga de briquete">
+          <div class="ends"><span>12 t/h</span><span>32 t/h</span></div>
+        </div>
+
+        <div class="slider">
+          <div class="top"><span>O₂ puro</span><b id="sOxygenVal">—</b></div>
+          <input type="range" id="sOxygen" min="4000" max="11000" step="100" value="7900" aria-label="Vazão de oxigênio">
+          <div class="ends"><span>4.000</span><span>11.000 Nm³/h</span></div>
+        </div>
+
+        <div class="slider">
+          <div class="top"><span>Alvo de temperatura</span><b id="sTempVal">—</b></div>
+          <input type="range" id="sTemp" min="1480" max="1536" step="1" value="1510" aria-label="Temperatura alvo do metal">
+          <div class="ends"><span>1.480 °C</span><span>1.536 °C</span></div>
+        </div>
+
+        <div class="cardhead" style="margin-top:14px">
+          <span class="eyebrow">Viabilidade</span>
+          <span class="meta">checagem de faixa</span>
+        </div>
+        <div class="verdict" id="verdict"><span id="verdictText">—</span></div>
+        <div id="checks"></div>
+
+        <div class="kpi" style="margin-top:10px">
+          <div class="top">
+            <span class="label">Produção estimada com estes parâmetros</span>
+            <span class="value" id="sProd">—</span>
+          </div>
+        </div>
+
+        <p class="hint">
+          Esta checagem verifica apenas as faixas declaradas do envelope operacional. O veredito
+          termodinâmico completo (balanço de massa e energia, equilíbrio de Boudouard, tempo de
+          residência, penetração do jato) é o motor da Etapa 2 — contrato já definido em
+          <code>contracts/feasibility-request.schema.json</code>.
+        </p>
+      </div>
+
+      <!-- ------------------------------------------------ plataforma -->
+      <div class="tabpane" id="panePlatform" role="tabpanel" aria-labelledby="tabPlatform" hidden>
+        <div class="cardhead">
+          <span class="eyebrow">Contratos de integração</span>
+          <span class="meta" id="platSummary">carregando…</span>
+        </div>
+        <div id="platRows"></div>
+        <p class="hint">
+          Cada linha é um JSON Schema em <code>web/contracts/</code> validado ao abrir a página
+          contra um payload de exemplo. “Contrato” verde significa schema e exemplo válidos;
+          “integração” descreve se o serviço real já está conectado.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- controles -->
+  <nav id="controls" aria-label="Controles da visualização">
+    <button class="ctrl on" id="btnView" type="button">Vista<br>interna</button>
+    <button class="ctrl on" id="btnFlows" type="button">Fluxos</button>
+    <button class="ctrl on" id="btnWear" type="button">Desgaste</button>
+    <button class="ctrl" id="btnCenter" type="button">Recentrar</button>
+    <button class="ctrl" id="btnData" type="button">Dados</button>
+    <button class="ctrl" id="btnAbout" type="button">Sobre</button>
+  </nav>
+
+  <!-- tour do processo -->
+  <section id="tour" class="card" aria-label="Etapas do processo Oxy-Red">
+    <div class="thead">
+      <div class="eyebrow">Processo Oxy-Red</div>
+      <div class="tbtns">
+        <button id="pPrev" type="button" title="Etapa anterior" aria-label="Etapa anterior">◀</button>
+        <button id="pPlay" type="button" title="Pausar tour" aria-label="Pausar tour">❚❚</button>
+        <button id="pNext" type="button" title="Próxima etapa" aria-label="Próxima etapa">▶</button>
+      </div>
+    </div>
+    <div class="phase"><span id="stepNum"></span><span id="stepName">Visão geral da usina</span></div>
+    <div id="stepDots"></div>
+    <div id="stepCap"></div>
+    <div id="mix">
+      <div class="mbar">
+        <span style="flex:70; background:var(--ore)"></span>
+        <span style="flex:23; background:var(--coal)"></span>
+        <span style="flex:7; background:var(--lime)"></span>
+      </div>
+      <div class="mlab"><span>Minério <b>70%</b></span><span>Carvão <b>23%</b></span><span>Cal <b>7%</b></span></div>
+    </div>
+    <div id="stepChem"></div>
+  </section>
+
+  <!-- legenda -->
+  <section id="legend" class="card" aria-label="Legenda">
+    <div class="eyebrow">Fluxos do processo</div>
+    <div class="chips" id="legendChips"></div>
+    <div class="wearramp">
+      <div class="eyebrow" style="font-size:9.5px; color:var(--dim)">Desgaste do refratário</div>
+      <div class="ramp"></div>
+      <div class="ramplab"><span>normal</span><span id="rampMax">limite</span><span>crítico</span></div>
+    </div>
+  </section>
+</div>
+
+<!-- ---------------------------------------------------------------- modais -->
+<div class="modal" id="dataPanel" role="dialog" aria-modal="true" aria-labelledby="dataTitle">
+  <div class="mcard">
+    <button class="mclose" type="button" data-close="dataPanel">FECHAR ✕</button>
+    <h2 id="dataTitle">Carregar desgaste por posição</h2>
+    <p>Cole o CSV ou o JSON do modelo (ou escolha um arquivo). Cada valor vira uma célula do revestimento do reator: fiada × setor.</p>
+    <textarea id="dataText" spellcheck="false" placeholder="Cole aqui os dados…"></textarea>
+    <div class="btnrow">
+      <button class="apply" id="dpApply" type="button">Aplicar</button>
+      <label>Escolher arquivo<input id="dpFile" type="file" accept=".csv,.json,.txt,text/csv,application/json" style="display:none"></label>
+      <button id="dpSampleCsv" type="button">Exemplo CSV</button>
+      <button id="dpSampleJson" type="button">Exemplo JSON</button>
+      <button id="dpReset" type="button">Voltar ao exemplo</button>
+    </div>
+    <div id="dpMsg"></div>
+    <details>
+      <summary>Formato dos dados</summary>
+      <ul>
+        <li>Zonas: <code>cuba_superior</code>, <code>cuba_inferior</code>, <code>ventaneiras</code>, <code>cadinho_parede</code>, <code>soleira</code>. Use só as que tiver.</li>
+        <li><b>Fiada 1 = a mais baixa</b> de cada zona. Na soleira, fiada 1 = anel central.</li>
+        <li><b>Setor 1 começa em 0° = furo de corrida</b>, crescendo no sentido anti-horário visto de cima.</li>
+        <li>O número de fiadas e de setores é lido do próprio dado, em qualquer tamanho.</li>
+        <li><b>CSV</b>: colunas <code>zona,fiada,setor,valor</code> e, opcional, <code>corrida</code>. Linhas <code># tipo=desgaste_mm</code>, <code># espessura_inicial_mm=450</code>, <code># limite_mm=300</code> definem a escala. Aceita ; e vírgula decimal.</li>
+        <li><b>JSON</b>: <code>snapshots</code> com <code>valores</code> (matriz [fiadas][setores] por zona) ou o formato canônico <code>zones</code> + <code>snaps</code>.</li>
+        <li><code>tipo</code>: <code>desgaste_mm</code>, <code>espessura_residual_mm</code> (exige espessura inicial) ou <code>indice</code>. <code>limite_mm</code> é o desgaste que vira vermelho.</li>
+      </ul>
+    </details>
+    <small style="display:block;margin-top:12px;color:var(--dim2);font-size:10.5px;line-height:1.5">
+      Os dados carregados valem para este navegador. Ao integrar a medição real, o mesmo formato
+      chega pelo contrato <code>wear-dataset.schema.json</code>.
+    </small>
+  </div>
+</div>
+
+<div class="modal" id="aboutPanel" role="dialog" aria-modal="true" aria-labelledby="aboutTitle">
+  <div class="mcard">
+    <button class="mclose" type="button" data-close="aboutPanel">FECHAR ✕</button>
+    <h2 id="aboutTitle">Etapa 1 · Modelo de animação e base arquitetural</h2>
+    <p>Entrega da Chordiq para o Processo 4G / Oxy-Red, com apoio da Gavea Tech na concepção operacional.</p>
+    <ul id="aboutList">
+      <li><b>Modelo de animação e HMI</b> — visualização 3D interativa do reator e painéis com dados simulados.</li>
+      <li><b>Arquitetura base</b> — contratos de API e schemas de dados prontos para CFD, surrogates e sensores.</li>
+      <li><b>Sem modelo matemático nesta etapa</b> — nenhuma simulação CFD ou inferência de IA é executada.</li>
+      <li><b>Dados</b> — simulação ilustrativa e conjunto de desgaste sintético, ambos rotulados na interface.</li>
+    </ul>
+    <div class="docs">
+      <a href="./docs/ARQUITETURA.md">Arquitetura</a>
+      <a href="./docs/INTEGRACAO_FUTURA.md">Integração futura</a>
+      <a href="./docs/MANUAL_OPERACAO.md">Manual</a>
+      <a href="./docs/ESCOPO_ETAPA1.md">Escopo etapa 1</a>
+      <a href="./docs/ESCOPO_ETAPA2.md">Próxima etapa</a>
+    </div>
+  </div>
+</div>
+
+<div id="bootError" role="alert"></div>
+
+<script>
+  // Falha de boot vira faixa visível em vez de tela preta silenciosa.
+  window.addEventListener('error', function (e) {
+    var el = document.getElementById('bootError');
+    if (!el) return;
+    el.textContent = 'Falha ao carregar o gêmeo digital: ' + (e.message || e.error || 'erro desconhecido');
+    el.classList.add('show');
+    document.getElementById('stage').dataset.boot = 'error';
+  });
+</script>
+<script type="module" src="./src/main.js"></script>
+</body>
+</html>

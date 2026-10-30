@@ -1,0 +1,47 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://chordiq.tech/oxyred/contracts/feasibility-request.schema.json",
+  "title": "Requisição de avaliação de viabilidade",
+  "description": "Entrada do motor termodinâmico/cinético (Etapa 2): geometria, energia, velocidades e briquete. O sistema deve responder se o cenário é viável e com que margem.",
+  "type": "object",
+  "required": ["geometry", "energy", "velocities", "briquette"],
+  "properties": {
+    "geometry": {
+      "type": "object",
+      "required": ["rInner", "bedHeightM", "tuyereCount"],
+      "properties": {
+        "rInner": { "type": "number", "minimum": 0.05 },
+        "bedHeightM": { "type": "number", "minimum": 0.1 },
+        "tuyereCount": { "type": "integer", "minimum": 1 }
+      }
+    },
+    "energy": {
+      "type": "object",
+      "required": ["oxygenNm3h", "coalKgH", "targetTempC"],
+      "properties": {
+        "oxygenNm3h": { "type": "number", "minimum": 0 },
+        "coalKgH": { "type": "number", "minimum": 0 },
+        "targetTempC": { "type": "number", "minimum": 1000, "maximum": 2000 },
+        "heatLossKw": { "type": "number", "minimum": 0 }
+      }
+    },
+    "velocities": {
+      "type": "object",
+      "required": ["gasVelocityMs", "briquetteResidenceMin"],
+      "properties": {
+        "gasVelocityMs": { "type": "number", "minimum": 0 },
+        "briquetteResidenceMin": { "type": "number", "minimum": 0 },
+        "jetVelocityMs": { "type": "number", "minimum": 0 }
+      }
+    },
+    "briquette": {
+      "type": "object",
+      "required": ["ore", "coal", "lime"],
+      "properties": {
+        "ore": { "type": "number", "minimum": 0, "maximum": 1 },
+        "coal": { "type": "number", "minimum": 0, "maximum": 1 },
+        "lime": { "type": "number", "minimum": 0, "maximum": 1 }
+      }
+    }
+  }
+}

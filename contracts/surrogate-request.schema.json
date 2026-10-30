@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://chordiq.tech/oxyred/contracts/surrogate-request.schema.json",
+  "title": "Requisição de inferência de modelo substituto",
+  "description": "Entrada dos surrogates (escalar e de campo). Contrato definido na Etapa 1; nesta etapa nenhum modelo é carregado.",
+  "type": "object",
+  "required": ["model", "version", "inputs"],
+  "properties": {
+    "model": { "type": "string", "enum": ["scalar", "field"] },
+    "version": { "type": "string" },
+    "inputs": {
+      "type": "object",
+      "required": ["oxygenNm3h", "throughputKgH", "briquette", "refractoryThicknessMm"],
+      "properties": {
+        "oxygenNm3h": { "type": "number", "minimum": 0 },
+        "throughputKgH": { "type": "number", "minimum": 0 },
+        "briquette": {
+          "type": "object",
+          "required": ["ore", "coal", "lime"],
+          "properties": {
+            "ore": { "type": "number", "minimum": 0, "maximum": 1 },
+            "coal": { "type": "number", "minimum": 0, "maximum": 1 },
+            "lime": { "type": "number", "minimum": 0, "maximum": 1 }
+          }
+        },
+        "refractoryThicknessMm": { "type": "number", "minimum": 0 },
+        "metalTempTargetC": { "type": "number", "minimum": 1000, "maximum": 2000 }
+      }
+    }
+  }
+}

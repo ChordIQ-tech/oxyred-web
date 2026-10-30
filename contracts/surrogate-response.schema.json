@@ -1,0 +1,37 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://chordiq.tech/oxyred/contracts/surrogate-response.schema.json",
+  "title": "Resposta de modelo substituto",
+  "description": "Saída dos surrogates. source diferencia modelo treinado em CFD real de proxy sintético — proibido apresentar o segundo como o primeiro.",
+  "type": "object",
+  "required": ["model", "version", "source", "outputs"],
+  "properties": {
+    "model": { "type": "string", "enum": ["scalar", "field"] },
+    "version": { "type": "string" },
+    "source": { "type": "string", "enum": ["cfd", "synthetic"] },
+    "outputs": {
+      "type": "object",
+      "properties": {
+        "metalTempC": { "type": "number" },
+        "feYieldPct": { "type": "number", "minimum": 0, "maximum": 100 },
+        "refractoryWearRateMmH": { "type": "number", "minimum": 0 },
+        "fieldT": {
+          "type": "object",
+          "required": ["r", "z", "values"],
+          "properties": {
+            "r": { "type": "array", "items": { "type": "number" } },
+            "z": { "type": "array", "items": { "type": "number" } },
+            "values": { "type": "array", "items": { "type": "array", "items": { "type": "number" } } }
+          }
+        }
+      }
+    },
+    "accuracy": {
+      "type": "object",
+      "properties": {
+        "rmseK": { "type": "number", "minimum": 0 },
+        "r2": { "type": "number" }
+      }
+    }
+  }
+}

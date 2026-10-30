@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://chordiq.tech/oxyred/contracts/feasibility-response.schema.json",
+  "title": "Resposta de viabilidade",
+  "description": "Resultado do motor termodinâmico: veredito, checagens por equação com valor/limite, resíduos de balanço e produção estimada para o conjunto de parâmetros.",
+  "type": "object",
+  "required": ["feasible", "checks", "production"],
+  "properties": {
+    "feasible": { "type": "boolean" },
+    "checks": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["id", "ok"],
+        "properties": {
+          "id": { "type": "string", "description": "Ex.: energy_balance, boudouard_equilibrium, residence_time, jet_penetration" },
+          "ok": { "type": "boolean" },
+          "value": { "type": "number" },
+          "limit": { "type": "number" },
+          "unit": { "type": "string" },
+          "equation": { "type": "string", "description": "Expressão ou referência usada." },
+          "message": { "type": "string" }
+        }
+      }
+    },
+    "production": {
+      "type": "object",
+      "required": ["feKgH"],
+      "properties": {
+        "feKgH": { "type": "number", "minimum": 0 },
+        "annualT": { "type": "number", "minimum": 0 },
+        "specificBriquette": { "type": "number", "minimum": 0 }
+      }
+    },
+    "residuals": {
+      "type": "object",
+      "properties": {
+        "massPct": { "type": "number" },
+        "energyPct": { "type": "number" }
+      }
+    },
+    "modelVersion": { "type": "string" }
+  }
+}

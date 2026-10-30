@@ -1,0 +1,6 @@
+{
+  "geometry": { "rInner": 1.8, "bedHeightM": 7.35, "tuyereCount": 8 },
+  "energy": { "oxygenNm3h": 7900, "coalKgH": 8450, "targetTempC": 1510, "heatLossKw": 1450 },
+  "velocities": { "gasVelocityMs": 0.42, "briquetteResidenceMin": 30, "jetVelocityMs": 145 },
+  "briquette": { "ore": 0.70, "coal": 0.23, "lime": 0.07 }
+}

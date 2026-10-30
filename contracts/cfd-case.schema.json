@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://chordiq.tech/oxyred/contracts/cfd-case.schema.json",
+  "title": "Manifesto de caso CFD multirregião",
+  "description": "Descreve um caso PINNApple/OpenFOAM (chtMultiRegionFoam) para o gêmeo digital. A Etapa 1 apenas define e valida o manifesto; nenhum caso é executado.",
+  "type": "object",
+  "required": ["caseId", "solver", "regions", "geometry", "outputs"],
+  "properties": {
+    "caseId": { "type": "string", "description": "Identificador único do caso (nunca reutilizado)." },
+    "solver": { "type": "string", "enum": ["chtMultiRegionFoam", "pinneapple-cfd"] },
+    "generatedAt": { "type": "string" },
+    "status": { "type": "string", "enum": ["planejado", "em execucao", "concluido", "divergiu"] },
+    "geometry": {
+      "type": "object",
+      "required": ["rInner", "yHearth", "yStock", "nTuyeres", "refractoryInitialMm"],
+      "properties": {
+        "rInner": { "type": "number", "minimum": 0.05 },
+        "rShell": { "type": "number", "minimum": 0.05 },
+        "yHearth": { "type": "number", "minimum": 0 },
+        "yStock": { "type": "number", "minimum": 0 },
+        "nTuyeres": { "type": "integer", "minimum": 1 },
+        "refractoryInitialMm": { "type": "number", "minimum": 1 }
+      }
+    },
+    "regions": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "string", "enum": ["freeboard", "bed", "bath_slag", "bath_metal", "refractory_working", "refractory_insulating", "shell_steel"] }
+    },
+    "outputs": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["name", "unit"],
+        "properties": {
+          "name": { "type": "string" },
+          "unit": { "type": "string" },
+          "region": { "type": "string" },
+          "field": { "type": "boolean" }
+        }
+      }
+    },
+    "notes": { "type": "string" }
+  }
+}

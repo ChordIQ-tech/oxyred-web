@@ -1,0 +1,11 @@
+{
+  "feasible": false,
+  "checks": [
+    { "id": "energy_balance", "ok": false, "value": 0.93, "limit": 1.0, "unit": "fração do calor requerido", "equation": "Q_entrada / Q_requerido", "message": "Déficit de calor no cenário de exemplo; aumentar O₂ ou reduzir perdas." },
+    { "id": "residence_time", "ok": true, "value": 30, "limit": 26, "unit": "min", "equation": "τ = V_leito / Ṽ_sólido" },
+    { "id": "jet_penetration", "ok": true, "value": 1.12, "limit": 1.0, "unit": "r/R", "equation": "penetração do jato (correlação)" }
+  ],
+  "production": { "feKgH": 22515, "annualT": 197233, "specificBriquette": 1.62 },
+  "residuals": { "massPct": 1.8, "energyPct": 6.9 },
+  "modelVersion": "exemplo-contrato"
+}

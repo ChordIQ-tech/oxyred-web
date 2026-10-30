@@ -1,0 +1,11 @@
+{
+  "model": "scalar",
+  "version": "0.1.0-contrato",
+  "inputs": {
+    "oxygenNm3h": 7900,
+    "throughputKgH": 22800,
+    "briquette": { "ore": 0.70, "coal": 0.23, "lime": 0.07 },
+    "refractoryThicknessMm": 402,
+    "metalTempTargetC": 1510
+  }
+}

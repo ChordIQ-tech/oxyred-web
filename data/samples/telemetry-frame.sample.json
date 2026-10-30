@@ -1,0 +1,13 @@
+{
+  "t": 128.5,
+  "mode": "simulado",
+  "metalTempC": 1512.4,
+  "metalLevelPct": 73,
+  "tapOpen": false,
+  "oxygenNm3h": 7900,
+  "recirculatedNm3h": 5400,
+  "offgas": { "coPct": 41.2, "co2Pct": 33.8, "h2Pct": 18.1 },
+  "production": { "feKgH": 22515, "briquetteKgH": 36474, "specificBriquette": 1.62, "annualT": 197233, "utilization": 0.986 },
+  "scenario": { "throughput": 22800, "oxygen": 7900, "targetTemp": 1510 },
+  "regions": null
+}

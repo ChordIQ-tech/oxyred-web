@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://chordiq.tech/oxyred/contracts/telemetry-frame.schema.json",
+  "title": "Frame de telemetria do gêmeo digital",
+  "description": "Contrato único entre HMI e backend. mode=simulado na Etapa 1; mode=medido quando a ingestão real entrar. regions fica null enquanto não houver modelo de campo.",
+  "type": "object",
+  "required": ["t", "mode", "metalTempC", "metalLevelPct", "tapOpen", "offgas", "production", "scenario"],
+  "properties": {
+    "t": { "type": "number", "minimum": 0, "description": "Segundos desde o início da sessão." },
+    "mode": { "type": "string", "enum": ["simulado", "medido"] },
+    "metalTempC": { "type": "number", "minimum": 1400, "maximum": 1600 },
+    "metalLevelPct": { "type": "number", "minimum": 0, "maximum": 100 },
+    "tapOpen": { "type": "boolean" },
+    "oxygenNm3h": { "type": "number", "minimum": 0 },
+    "recirculatedNm3h": { "type": "number", "minimum": 0 },
+    "offgas": {
+      "type": "object",
+      "required": ["coPct", "co2Pct", "h2Pct"],
+      "properties": {
+        "coPct": { "type": "number", "minimum": 0, "maximum": 100 },
+        "co2Pct": { "type": "number", "minimum": 0, "maximum": 100 },
+        "h2Pct": { "type": "number", "minimum": 0, "maximum": 100 }
+      }
+    },
+    "production": {
+      "type": "object",
+      "required": ["feKgH", "briquetteKgH", "specificBriquette", "annualT"],
+      "properties": {
+        "feKgH": { "type": "number", "minimum": 0 },
+        "briquetteKgH": { "type": "number", "minimum": 0 },
+        "specificBriquette": { "type": "number", "minimum": 0 },
+        "annualT": { "type": "number", "minimum": 0 },
+        "utilization": { "type": "number", "minimum": 0 }
+      }
+    },
+    "scenario": {
+      "type": "object",
+      "required": ["throughput", "oxygen", "targetTemp"],
+      "properties": {
+        "throughput": { "type": "number", "minimum": 0 },
+        "oxygen": { "type": "number", "minimum": 0 },
+        "targetTemp": { "type": "number", "minimum": 0 }
+      }
+    },
+    "regions": {
+      "type": ["object", "null"],
+      "description": "Por região do CFD: temperatura e frações de fase (Etapa 2)."
+    }
+  }
+}
